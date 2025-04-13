@@ -2,6 +2,11 @@ import google.generativeai as genai
 import json
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
+import os
+from dotenv import load_dotenv
+load_dotenv()  # Load environment variables from .env file
+
+API_KEY = os.getenv("API_KEY")  # Ensure your API key is set in the environment variable
 
 # --- Configuration ---
   # Replace with your Gemini API key
@@ -104,29 +109,3 @@ def generate_response(query, sentiment):
     else:
         return f"Let me assist you with your query: {get_most_similar(query)}"
 
-# --- Chatbot Interface ---
-def run_chatbot():
-    print("🛒 E-commerce FAQ Bot (Type 'quit' to exit)\n")
-    
-    while True:
-        user_input = input("You: ").strip()
-        
-        if user_input.lower() in ["quit", "exit", "bye"]:
-            print("Bot: Goodbye! 👋")
-            break
-        
-        if not user_input:
-            print("Bot: Please ask a question.")
-            continue
-        
-        # Step 1: Sentiment Analysis
-        sentiment = detect_sentiment_with_gemini(user_input)
-       
-       
-        
-        # Step 2: Generate Response based on Sentiment and FAQ Retrieval
-        response = generate_response(user_input, sentiment)
-        print(f"Bot: {response}\n")
-
-# --- Run the Chatbot ---
-run_chatbot()

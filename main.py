@@ -1,56 +1,5 @@
 import streamlit as st
-from PIL import Image
-import base64
-import random
-
-
-# Dummy functions to simulate model predictions
-def classify_intent(query):
-    if "refund" in query.lower():
-        return "Refund"
-    elif "delivery" in query.lower():
-        return "Delivery Issue"
-    elif "account" in query.lower():
-        return "Account Problem"
-    else:
-        return "General Inquiry"
-
-
-def retrieve_faq(query):
-    # Dummy FAQ match
-    faqs = {
-        "Refund": "Please check our refund policy at example.com/refund. Refunds are typically processed within 3-5 business days.",
-        "Delivery Issue": "We're sorry to hear about your delivery problem. Most orders arrive within 2-3 business days after shipping.",
-        "Account Problem": "For account-related issues, you can reset your password or update your details in your account settings.",
-        "General Inquiry": "Thanks for your question. Please provide more details so we can better assist you."
-    }
-    intent = classify_intent(query)
-    return faqs[intent]
-
-
-def generate_response(intent, faq_answer):
-    return f"Thanks for reaching out regarding {intent.lower()}. {faq_answer}"
-
-
-# Function to create a custom card-like container
-def card(title, content, color="#4263EB"):
-    st.markdown(
-        f"""
-        <div style="
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            border-left: 7px solid {color};
-            margin-bottom: 15px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        ">
-            <h4 style="color: {color};">{title}</h4>
-            <p>{content}</p>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-
+import markhor
 
 # Page configuration with custom CSS
 st.set_page_config(
@@ -129,9 +78,11 @@ query = st.text_input("", placeholder="Type your question here...", key="query_i
 
 # Chat interface
 if query:
-    intent = classify_intent(query)
-    faq_answer = retrieve_faq(query)
-    response = generate_response(intent, faq_answer)
+
+    # faq_answer = retrieve_faq(query)
+
+    sentiment = markhor.detect_sentiment_with_gemini(query)
+    response = markhor.generate_response(query, sentiment)
 
     # User message
     st.markdown(
@@ -142,7 +93,7 @@ if query:
             margin-bottom: 15px;
         ">
             <div style="
-                background-color: #E2E8F0;
+                background-color: #000000;
                 padding: 15px;
                 border-radius: 20px 20px 0 20px;
                 max-width: 80%;
@@ -178,42 +129,9 @@ if query:
         unsafe_allow_html=True
     )
 
-    # Intent detection card
-    intent_colors = {
-        "Refund": "#3b82f6",
-        "Delivery Issue": "#8b5cf6",
-        "Account Problem": "#ec4899",
-        "General Inquiry": "#10b981"
-    }
+
 
     col1, col2 = st.columns([1, 2])
-    with col1:
-        st.markdown(
-            f"""
-            <div style="
-                background-color: white;
-                padding: 15px;
-                border-radius: 10px;
-                text-align: center;
-                margin-bottom: 20px;
-                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            ">
-                <h4 style="margin: 0; font-size: 0.9rem; color: #6B7280;">DETECTED INTENT</h4>
-                <div style="
-                    background-color: {intent_colors.get(intent, '#4263EB')};
-                    color: white;
-                    padding: 8px 15px;
-                    border-radius: 20px;
-                    display: inline-block;
-                    margin-top: 10px;
-                    font-weight: bold;
-                ">
-                    {intent}
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
 
     # Feedback section with enhanced UI
     st.markdown("<h3 style='margin: 30px 0 15px 0; text-align: center;'>Was this response helpful?</h3>",
