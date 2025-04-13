@@ -4,7 +4,7 @@ import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
 # --- Configuration ---
-API_KEY = "AIzaSyAPRrrT3XaD30HUXNRzui8GvifWI1gfTo4"  # Replace with your Gemini API key
+  # Replace with your Gemini API key
 genai.configure(api_key=API_KEY)
 
 # --- Load FAQ Data from a file path ---
