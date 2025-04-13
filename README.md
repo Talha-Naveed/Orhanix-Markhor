@@ -43,10 +43,3 @@ An intelligent AI-powered FAQ Agent designed to handle E-commerce related querie
 
 ---
 
-## 🚀 Getting Started
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/yourusername/ecommerce-faq-agent.git
-cd ecommerce-faq-agent
